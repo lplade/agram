@@ -59,10 +59,10 @@ class NumberManager {
     }
 
     static String getNumberStringShort(int numberInt) {
-        assert numberStrings.containsKey(numberInt);
+        assert numberStringsShort.containsKey(numberInt);
 
-        if (numberStrings.containsKey(numberInt)) {
-            return numberStrings.get(numberInt);
+        if (numberStringsShort.containsKey(numberInt)) {
+            return numberStringsShort.get(numberInt);
         } else {
             return "!"; //TODO assert?
         }

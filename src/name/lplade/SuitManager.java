@@ -7,24 +7,26 @@ import java.util.HashMap;
  */
 //class to encode suits
 //based on the FurnaceTypeManager from HVAC program
+
+// move from subclass of Card into own class
 class SuitManager {
     // These values key to values in Unicode playing code standard
     // https://en.wikipedia.org/wiki/Playing_cards_in_Unicode
     // In theory, we can add them to a card value and get a Unicode glyph.
-    static final int SPADES = 0xA0;
-    static final int HEARTS = 0xB0;
-    static final int DIAMONDS = 0xC0;
-    static final int CLUBS = 0xD0;
+    private static final int SPADES = 0xA0;
+    private static final int HEARTS = 0xB0;
+    private static final int DIAMONDS = 0xC0;
+    private static final int CLUBS = 0xD0;
 
     //Suit symbols
     //mind the plurals on these
-    static final char SPADE = 0x2660;
-    static final char HEART = 0x2665;
-    static final char DIAMOND = 0x2666;
-    static final char CLUB = 0x2663;
+    private static final char SPADE = 0x2660;
+    private static final char HEART = 0x2665;
+    private static final char DIAMOND = 0x2666;
+    private static final char CLUB = 0x2663;
 
-    static HashMap<Integer, String> suits;
-    static HashMap<Integer, String> suitGlyphs;
+    private static HashMap<Integer, String> suits;
+    private static HashMap<Integer, String> suitGlyphs;
 
     //Static initialization blocks
     //Map internal values for suits to words
@@ -61,4 +63,13 @@ class SuitManager {
         }
     }
 
+    // http://stackoverflow.com/questions/20278639/hashmap-reverse-key-lookup
+    static int getSuitCodeByStr(String suitString) {
+        for (HashMap.Entry<Integer, String> suitEntry : suits.entrySet()) {
+            if (suitEntry.getValue().equals(suitString)) {
+                return suitEntry.getKey();
+            }
+        }
+       throw new AssertionError(suitString); //we should never get here
+    }
 }
