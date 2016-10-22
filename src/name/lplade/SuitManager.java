@@ -10,6 +10,8 @@ import java.util.HashMap;
 
 // move from subclass of Card into own class
 class SuitManager {
+    //TODO suits as enums?
+
     // These values key to values in Unicode playing code standard
     // https://en.wikipedia.org/wiki/Playing_cards_in_Unicode
     // In theory, we can add them to a card value and get a Unicode glyph.

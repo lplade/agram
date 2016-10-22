@@ -17,19 +17,37 @@ class Card {
 
     private int value; // 1 means ace here
     private int suit; //0xA0, 0xB0, 0xC0, 0xD0 - see SuitManager()
+    private boolean isRed;
     private boolean faceDown; //for display purposes
 
     Card(int suit, int value) {
         this.suit = suit;
         this.value = value;
         this.faceDown = false;
+        this.isRed = (suit == 0xB0) || (suit == 0xC0);
     }
 
-    public String getString(){
+    String getString(){
         //return something like "9♣"
         //TODO make hearts and diamonds red?
         String cardString = NumberManager.getNumberStringShort(this.value) + SuitManager.getSuitGlyph(this.suit);
         return cardString;
+    }
+
+    public String getCardGlyph(){
+        //Unicode 6 card symbols
+        int cardGlyphRaw = (0x1f000 + this.suit + this.value);
+        //Turns out these high Unicode values don't fit in a single char.
+        // Have to turn this into an array of chars, then turn that into a string
+        char[] ca = Character.toChars(cardGlyphRaw);
+        String cardGlyphPlain = new String(ca);
+        String cardGlyph;
+        if (this.isRed) {
+            cardGlyph = redIt(cardGlyphPlain);
+        } else {
+            cardGlyph = blacken(cardGlyphPlain);
+        }
+        return cardGlyph;
     }
 
     //TODO getCardGlyph to return single Unicode glyph representing the card.
@@ -65,22 +83,28 @@ class Card {
         return faceDown;
     }
 
-    public void setValue(String suit) {
-
-
-        this.value = value;
-    }
-
-    public void setSuit(int suit) {
-        this.suit = suit;
-    }
+    //can't think of good use ATM for having setters for suit and value
+    //cards work like cards, not magic
 
     public void setFaceDown(boolean faceDown) {
         this.faceDown = faceDown;
     }
 
+    public String redIt(String makeMeRed) {
+        final String ANSI_reset_color = "\u001B[0m";
+        final String RED_TEXT = "\u001B[31m";
+        //ANSI 'white' background is usually more like a gray, no reliable way to make it white. :(
+        final String WHITE_BACK = "\u001B[47m";
+        String redrum = WHITE_BACK + RED_TEXT + makeMeRed + ANSI_reset_color;
+        return redrum;
+    }
 
-
-
+    public String blacken(String toBlack) {
+        final String ANSI_reset_color = "\u001B[0m";
+        final String BLACK_TEXT = "\u001B[30m";
+        final String WHITE_BACK = "\u001B[47m";
+        String black = WHITE_BACK + BLACK_TEXT + toBlack + ANSI_reset_color;
+        return black;
+    }
 
 }

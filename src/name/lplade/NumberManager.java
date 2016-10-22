@@ -16,10 +16,10 @@ class NumberManager {
 
     //This gets used by other classes and needed to move out into its own class
 
-    static final int ACE = 0x01;
-    static HashMap<Integer, String> numberStrings;
-    static HashMap<Integer, String> numberStringsShort;
-    static HashMap<Integer, Integer> numberValues;
+    private static final int ACE = 0x01;
+    private static HashMap<Integer, String> numberStrings;
+    private static HashMap<Integer, String> numberStringsShort;
+    private static HashMap<Integer, Integer> numberValues;
 
     static {
         numberStrings = new HashMap<Integer, String>();

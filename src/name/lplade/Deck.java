@@ -14,7 +14,7 @@ public class Deck {
 
     Deck(){
         //
-        int[] suits = { 0xA0, 0xB0, 0xC0, 0xD0 }; //TODO use SuitManager?
+        int[] suits = { 0xA0, 0xB0, 0xC0, 0xD0 }; //TODO use SuitManager? enums?
         for(int s=0; s < 4; s++){ //each suit
             for(int val=1; val <= 10; val++) { //ace, 2, 3 ... 10)
                 if (!(val == 1 && s == 0)) { //don't add "the chief"
@@ -45,6 +45,15 @@ public class Deck {
         String cardList = "";
         for (int i = 0; i < this.deck.size(); i++) {
             cardList = cardList + this.deck.get(i).getString() + " ";
+        }
+        return cardList;
+    }
+
+    public String toString2() {
+        //this is mostly for testing, unlikely it will ever be needed for game
+        String cardList = "";
+        for (int i = 0; i < this.deck.size(); i++) {
+            cardList = cardList + this.deck.get(i).getCardGlyph() + " ";
         }
         return cardList;
     }
