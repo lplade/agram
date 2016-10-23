@@ -54,7 +54,7 @@ class NumberManager {
         if (numberStrings.containsKey(numberInt)) {
             return numberStrings.get(numberInt);
         } else {
-            return "!!"; //TODO probably a better way to handle this condition. Assert?
+            throw new AssertionError(numberInt);
         }
     }
 
@@ -64,7 +64,7 @@ class NumberManager {
         if (numberStringsShort.containsKey(numberInt)) {
             return numberStringsShort.get(numberInt);
         } else {
-            return "!"; //TODO assert?
+            throw new AssertionError(numberInt);
         }
     }
 
@@ -74,7 +74,7 @@ class NumberManager {
         if (numberValues.containsKey(numberInt)) {
             return numberValues.get(numberInt);
         } else {
-            return 0; //TODO probably a better way to handle this condition. Assert?
+            throw new AssertionError(numberInt);
         }
     }
 }

@@ -4,6 +4,7 @@ package name.lplade;
  * Created by lade on 10/18/16.
  */
 
+import name.lplade.SuitManager.Suit; //need the Suit enum
 
 class Card {
 
@@ -16,27 +17,31 @@ class Card {
     //- numeric values to test if aces are better than twos
 
     private int value; // 1 means ace here
-    private int suit; //0xA0, 0xB0, 0xC0, 0xD0 - see SuitManager()
+    //private int suit; //0xA0, 0xB0, 0xC0, 0xD0 - see SuitManager()
+    private Suit suit;
     private boolean isRed;
     private boolean faceDown; //for display purposes
 
-    Card(int suit, int value) {
+    Card(Suit suit, int value) {
         this.suit = suit;
         this.value = value;
         this.faceDown = false;
-        this.isRed = (suit == 0xB0) || (suit == 0xC0);
+        this.isRed = (suit == Suit.DIAMONDS) || (suit == Suit.HEARTS);
     }
+
+    // ** GETTERS **
 
     String getString(){
         //return something like "9♣"
         //TODO make hearts and diamonds red?
-        String cardString = NumberManager.getNumberStringShort(this.value) + SuitManager.getSuitGlyph(this.suit);
-        return cardString;
+        String numPart = NumberManager.getNumberStringShort(this.value);
+        String symPart = Character.toString(SuitManager.getSuitGlyph(this.suit));
+        return numPart + symPart;
     }
 
-    public String getCardGlyph(){
-        //Unicode 6 card symbols
-        int cardGlyphRaw = (0x1f000 + this.suit + this.value);
+    String getCardGlyph(){
+        //Unicode 6.0 card symbols
+        int cardGlyphRaw = (0x1f000 + SuitManager.getUnicodeMask(this.suit) + this.value);
         //Turns out these high Unicode values don't fit in a single char.
         // Have to turn this into an array of chars, then turn that into a string
         char[] ca = Character.toChars(cardGlyphRaw);
@@ -54,8 +59,7 @@ class Card {
 
     //returns number that appears on face of card, 2 through A;
     public String getNumberStr(){
-        String number = NumberManager.getNumberString(this.value);
-        return number;
+        return NumberManager.getNumberString(this.value);
     }
 
     //returns numeric value for in-game comparisons
@@ -69,42 +73,46 @@ class Card {
 
     //return suit as a word "diamonds" etc.
     public String getSuitWord(){
-        String suit = SuitManager.getSuitString(this.suit);
-        return suit;
+        return SuitManager.getSuitString(this.suit);
     }
 
     //return symbol for suit
     public String getSuitGlyph(){
-        String suit = SuitManager.getSuitGlyph(this.suit);
-        return suit;
+        return Character.toString(SuitManager.getSuitGlyph(this.suit));
     }
 
     public boolean isFaceDown() {
         return faceDown;
     }
 
+    // END GETTERS
+
+    // ** SETTERS **
+
     //can't think of good use ATM for having setters for suit and value
     //cards work like cards, not magic
 
-    public void setFaceDown(boolean faceDown) {
+    void setFaceDown(boolean faceDown) {
         this.faceDown = faceDown;
     }
 
-    public String redIt(String makeMeRed) {
+    // END SETTERS
+
+    // ** MISCELLANEOUS METHODS **
+
+    private String redIt(String makeMeRed) {
         final String ANSI_reset_color = "\u001B[0m";
         final String RED_TEXT = "\u001B[31m";
         //ANSI 'white' background is usually more like a gray, no reliable way to make it white. :(
         final String WHITE_BACK = "\u001B[47m";
-        String redrum = WHITE_BACK + RED_TEXT + makeMeRed + ANSI_reset_color;
-        return redrum;
+        return WHITE_BACK + RED_TEXT + makeMeRed + ANSI_reset_color;
     }
 
-    public String blacken(String toBlack) {
+    private String blacken(String toBlack) {
         final String ANSI_reset_color = "\u001B[0m";
         final String BLACK_TEXT = "\u001B[30m";
         final String WHITE_BACK = "\u001B[47m";
-        String black = WHITE_BACK + BLACK_TEXT + toBlack + ANSI_reset_color;
-        return black;
+        return WHITE_BACK + BLACK_TEXT + toBlack + ANSI_reset_color;
     }
 
 }

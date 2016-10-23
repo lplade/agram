@@ -2,13 +2,14 @@ package name.lplade;
 
 import java.util.LinkedList;
 import java.util.Scanner;
+import name.lplade.SuitManager.Suit; //Suit enum
 
 public class Main {
 
     public static void main(String[] args) {
         Deck deck = new Deck();
 
-        final Card CHIEF = new Card(0xA0, 1);
+        final Card CHIEF = new Card(Suit.SPADES, 1);
 
         Scanner numScanner = new Scanner(System.in);
         //TODO get all inputs as string and convert to int, then pull numScanner
@@ -49,6 +50,8 @@ public class Main {
 
         //TODO create Player objects for each player, store in a collection
         //TODO create a Class which defines a circular linked list
+        //Let's try it with a normal array
+        Player[] players = new Player[numPlayers];
 
         //TODO determine first dealer
 
