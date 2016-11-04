@@ -4,9 +4,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import name.lplade.SuitManager.Suit; //need the Suit enum
 
-/**
- * Created by lade on 10/18/16.
- */
 class Deck {
 
     private LinkedList<Card> deck = new LinkedList<>();

@@ -1,8 +1,5 @@
 package name.lplade;
 
-/**
- * Created by lade on 10/18/16.
- */
 
 import name.lplade.SuitManager.Suit; //need the Suit enum
 

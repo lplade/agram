@@ -34,9 +34,16 @@ public class Main {
         //get some player names
         String[] playerNames = new String[numPlayers];
         for (int p = 0; p < numPlayers; p++) {
-            System.out.println("Enter the name for player " + (p+1) + ": ");
-            playerNames[p] = strScanner.nextLine();
-            //TODO assert playerNames[p] is not empty
+            while(true){
+                System.out.println("Enter the name for player " + (p+1) + ": "); //normal person counting
+                String name = strScanner.nextLine();
+                if (name.isEmpty()) { //make sure we actually entered a name before continuing
+                    System.out.println("Name can't be blank!");
+                } else {
+                    playerNames[p] = name;
+                    break; //resume
+                }
+            }
         }
 
         //TODO add a way to designate some players as CPU controlled
@@ -50,12 +57,13 @@ public class Main {
 
         //TODO create Player objects for each player, store in a collection
         //TODO create a Class which defines a circular linked list
-        //Let's try it with a normal array
-        Player[] players = new Player[numPlayers];
 
         //TODO determine first dealer
 
+
         //TODO for each player, deal out 3 cards
+
+
         //TODO for each player, deal out 3 more cards
 
         //TODO main game loop

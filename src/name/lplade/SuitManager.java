@@ -2,9 +2,6 @@ package name.lplade;
 
 //import java.util.HashMap;
 
-/**
- * Created by lade on 10/20/16.
- */
 //class to encode suits
 //based on the FurnaceTypeManager from HVAC program
 

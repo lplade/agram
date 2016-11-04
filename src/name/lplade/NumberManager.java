@@ -2,9 +2,6 @@ package name.lplade;
 
 import java.util.HashMap;
 
-/**
- * Created by lade on 10/20/16.
- */
 class NumberManager {
     //Internally store card values as integers 1-10
     //These match Unicode mapper for future output handling
