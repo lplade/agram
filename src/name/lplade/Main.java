@@ -9,7 +9,7 @@ import name.lplade.SuitManager.Suit; //Suit enum
 
 public class Main {
 
-    public void main(String[] args) {
+    public static void main(String[] args) {
 
         final Card CHIEF = new Card(Suit.SPADES, 1);
         char[] cbraw = Character.toChars(0x1F0A0);
@@ -116,7 +116,7 @@ public class Main {
 
 
         //Play six rounds
-        for (int trick = 0; trick < 6; trick++){
+        for (int round = 0; round < 6; round++){
             //Each player plays one card in the round
             for (int p = 0; p < numPlayers; p++){
                 clearScreen();
@@ -124,22 +124,39 @@ public class Main {
                 System.out.println("All other players look away! Press <ENTER> to continue");
                 String enter = strScanner.nextLine();
 
+                //Feed the ArrayList of cards into an array of console-friendly selections
+                int cardIndex = 0;
+                Card[] cardSelections = new Card[table.getCurrentPlayer().getHand().getLength()];
+                for (Card card : table.getCurrentPlayer().getHand().getCards()){
+                    cardSelections[cardIndex] = card;
+                    cardIndex++;
+                }
+
+                //TODO display the cards on the table here
+
+                //Show a list of the cards in the hand, keyed to integers
+                System.out.println("-- Your hand --");
+                for (int i = 0; i < cardSelections.length; i++){
+                    System.out.printf("%1d: %1s ", i+1, cardSelections[i].getCardGlyph());
+
+                }
+                System.out.println();
+
+
+                System.out.println("And then I prompt you");
+
+                //TODO - show hand
+                //TODO - offer input choices for eligible cards
+                //TODO - pull that card out of player's hand
+                //TODO - put that card into center pile
+                //Move to the next player's go
+                table.advancePlay();
+
             }
+            //TODO score trick
+
+            //TODO starting with player who took trick, repeat above
         }
-
-
-
-        //TODO - show hand
-        //TODO - offer input choices for eligible cards
-        //TODO - pull that card out of player's hand
-        //TODO - put that card into center pile
-        //TODO repeat for each player, going right
-
-        //TODO score trick
-
-        //TODO starting with player who took trick, repeat above
-
-        //TODO run six rounds
 
         //TODO declare winner
 
@@ -147,7 +164,7 @@ public class Main {
 
     }
 
-    private void clearScreen(){
+    private static void clearScreen(){
         //method to clear the screen
         //current method is based on raw ANSI codes
         //TODO re-write for better system independence

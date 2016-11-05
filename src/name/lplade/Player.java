@@ -88,6 +88,10 @@ class Player {
             return cardsInHand.size();
         }
 
+        public ArrayList<Card> getCards(){
+            return this.cardsInHand;
+        }
+
         @Override
         public String toString(){
             // returns picture glyphs
@@ -97,6 +101,8 @@ class Player {
             }
             return handList;
         }
+
+
 
     }
 
