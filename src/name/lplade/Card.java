@@ -86,7 +86,7 @@ class Card {
 
     // ** SETTERS **
 
-    //can't think of good use ATM for having setters for suit and value
+    //can't think of good use for having setters for suit and value
     //cards work like cards, not magic
 
     void setFaceDown(boolean faceDown) {

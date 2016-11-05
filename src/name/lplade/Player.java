@@ -1,21 +1,18 @@
 package name.lplade;
 
-
 import java.util.ArrayList;
 
 class Player {
 
     private String name;
     private Hand hand;
-    private Player rightPlayer; //must add next player in list
-    private Player leftPlayer; //must add previous player in list
+    private boolean myTurn = false;
 
     //Constructor
     Player(String name){
         this.name = name;
         this.hand = new Hand(); //leave empty, deal in game
-        this.rightPlayer = null;
-        this.leftPlayer = null;
+
     }
 
     //Getters and setters
@@ -25,23 +22,6 @@ class Player {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    void setRightPlayer(Player p) {
-        rightPlayer = p;
-    }
-
-    void setLeftPlayer(Player p) {
-        leftPlayer = p;
-    }
-
-    Player getRightPlayer(){
-        assert rightPlayer != null;
-        return rightPlayer;
-    }
-    Player getLeftPlayer(){
-        assert rightPlayer != null;
-        return leftPlayer;
     }
 
     public Hand getHand() {
@@ -55,12 +35,29 @@ class Player {
     public void addToHand(Card cardToAdd){
         this.hand.add(cardToAdd);
     }
+
     public Card pullFromHand(Card cardToPull){
         this.hand.moveFrom(cardToPull);
         return cardToPull; //if we already know the value of cardToPull, is this redundant?
     }
 
-    private class Hand {
+    public boolean isMyTurn() {
+        return myTurn;
+    }
+
+    public void setMyTurn(boolean myTurn) {
+        this.myTurn = myTurn;
+    }
+
+    @Override
+    public String toString(){
+        return name;
+        //TODO return other info?
+    }
+
+    // Hands only ever exists inside Player, so define here
+
+    protected class Hand {
         private ArrayList<Card> cardsInHand = new ArrayList<>();
 
         Hand(){
@@ -85,6 +82,10 @@ class Player {
                 cardToHide.setFaceDown(true);
                 this.cardsInHand.set(i, cardToHide);
             }
+        }
+
+        public int getLength() {
+            return cardsInHand.size();
         }
 
         @Override
