@@ -16,7 +16,7 @@ class Player {
     }
 
     //Getters and setters
-    public String getName() {
+    String getName() {
         return name;
     }
 
@@ -24,7 +24,7 @@ class Player {
         this.name = name;
     }
 
-    public Hand getHand() {
+    Hand getHand() {
         return hand;
     }
 
@@ -32,7 +32,7 @@ class Player {
         this.hand = hand;
     }
 
-    public void addToHand(Card cardToAdd){
+    void addToHand(Card cardToAdd){
         this.hand.add(cardToAdd);
     }
 
@@ -45,7 +45,7 @@ class Player {
         return myTurn;
     }
 
-    public void setMyTurn(boolean myTurn) {
+    void setMyTurn(boolean myTurn) {
         this.myTurn = myTurn;
     }
 
@@ -57,7 +57,7 @@ class Player {
 
     // Hands only ever exists inside Player, so define here
 
-    protected class Hand {
+    class Hand {
         private ArrayList<Card> cardsInHand = new ArrayList<>();
 
         Hand(){
@@ -70,7 +70,7 @@ class Player {
             this.cardsInHand.add(cardToAdd);
         }
 
-        private Card moveFrom(Card cardToPull){
+        Card moveFrom(Card cardToPull){
             this.cardsInHand.remove(cardToPull);
             return cardToPull;
         }
@@ -84,11 +84,11 @@ class Player {
             }
         }
 
-        public int getLength() {
+        int getLength() {
             return cardsInHand.size();
         }
 
-        public ArrayList<Card> getCards(){
+        ArrayList<Card> getCards(){
             return this.cardsInHand;
         }
 

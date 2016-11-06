@@ -3,7 +3,10 @@ package name.lplade;
 
 import name.lplade.SuitManager.Suit; //need the Suit enum
 
+
 class Card {
+
+    private static final boolean ANSI_COLOR = true;
 
     //Cards needed are A, 10, 9, 8, 7, 6, 5, 4, 3
     //Ace is high - give numeric value of 11.
@@ -78,6 +81,16 @@ class Card {
         return Character.toString(SuitManager.getSuitGlyph(this.suit));
     }
 
+    //return the raw Suit enum as defined in SuitManager
+    public Suit getSuitEnum(){
+        return this.suit;
+    }
+
+    //return card as string "ace of spades"
+    public String getLongString() {
+        return String.format("%s of %s",NumberManager.getNumberString(this.value), SuitManager.getSuitString(this.suit));
+    }
+
     public boolean isFaceDown() {
         return faceDown;
     }
@@ -98,18 +111,28 @@ class Card {
     // ** MISCELLANEOUS METHODS **
 
     private String redIt(String makeMeRed) {
-        final String ANSI_reset_color = "\u001B[0m";
-        final String RED_TEXT = "\u001B[31m";
-        //ANSI 'white' background is usually more like a gray, no reliable way to make it white. :(
-        final String WHITE_BACK = "\u001B[47m";
-        return WHITE_BACK + RED_TEXT + makeMeRed + ANSI_reset_color;
+        if (ANSI_COLOR) {
+            final String ANSI_reset_color = "\u001B[0m";
+            final String RED_TEXT = "\u001B[31m";
+            //ANSI 'white' background is usually more like a gray, no reliable way to make it white. :(
+            final String WHITE_BACK = "\u001B[47m";
+            //final String WHITE_BACK = "";
+            return WHITE_BACK + RED_TEXT + makeMeRed + ANSI_reset_color;
+        } else {
+            return makeMeRed; //don't color if parameter is disabled
+        }
     }
 
     private String blacken(String toBlack) {
-        final String ANSI_reset_color = "\u001B[0m";
-        final String BLACK_TEXT = "\u001B[30m";
-        final String WHITE_BACK = "\u001B[47m";
-        return WHITE_BACK + BLACK_TEXT + toBlack + ANSI_reset_color;
+        if (ANSI_COLOR) {
+            final String ANSI_reset_color = "\u001B[0m";
+            final String BLACK_TEXT = "\u001B[30m";
+            final String WHITE_BACK = "\u001B[47m";
+            //final String WHITE_BACK ="";
+            return WHITE_BACK + BLACK_TEXT + toBlack + ANSI_reset_color;
+        } else {
+            return toBlack;
+        }
     }
 
 }

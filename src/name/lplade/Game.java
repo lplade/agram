@@ -4,12 +4,12 @@ package name.lplade;
 // http://stackoverflow.com/questions/4870165/player-order-in-card-game
 
 
-public class Game {
+class Game {
     private String[] playerNames;
     private Player[] players;
     private int playerTurnIndex = 0;
 
-    public Game(String[] playerNames) {
+    Game(String[] playerNames) {
         this.playerNames = playerNames;
         players = new Player[playerNames.length];
         for (int i = 0; i < playerNames.length; i++) {
@@ -21,7 +21,7 @@ public class Game {
         return playerTurnIndex;
     }
 
-    public Player getCurrentPlayer(){
+    Player getCurrentPlayer(){
         return players[playerTurnIndex];
     }
 
@@ -29,7 +29,7 @@ public class Game {
         return playerNames;
     }
 
-    public void advancePlay() {
+    void advancePlay() {
         playerTurnIndex++;
         playerTurnIndex %= players.length; //I THINK this handles go-rounds past the first
         for (Player player: players) {
@@ -43,7 +43,7 @@ public class Game {
 
     //re-initializes the turn order. Argument is the player array index.
     //remember to getPlayerTurnIndex() before calling this.
-    public void startNewRound(int playerIndex){
+    void startNewRound(int playerIndex){
         //reset all the players except the new starting player
         for (int i = 0; i < players.length; i++) {
             if (i == playerIndex) {
@@ -56,11 +56,14 @@ public class Game {
         playerTurnIndex = playerIndex;
     }
 
-    public int getPlayerCount(){
+    int getPlayerCount(){
         return players.length;
     }
 
-    public Player getPlayer(int i){
+    Player getPlayer(int i){
         return players[i];
     }
+
+
+
 }
