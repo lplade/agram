@@ -12,7 +12,6 @@ class Player {
     Player(String name){
         this.name = name;
         this.hand = new Hand(); //leave empty, deal in game
-
     }
 
     //Getters and setters
@@ -48,6 +47,7 @@ class Player {
     void setMyTurn(boolean myTurn) {
         this.myTurn = myTurn;
     }
+
 
     @Override
     public String toString(){

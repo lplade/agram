@@ -22,6 +22,7 @@ class Trick {
         return this.suit;
     }
 
+
     public int getHighValue(){
         return this.highVal;
     }

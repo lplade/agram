@@ -8,6 +8,7 @@ class Game {
     private String[] playerNames;
     private Player[] players;
     private int playerTurnIndex = 0;
+    private int winnerIndex = 0;
 
     Game(String[] playerNames) {
         this.playerNames = playerNames;
@@ -62,6 +63,22 @@ class Game {
 
     Player getPlayer(int i){
         return players[i];
+    }
+
+    int getWinnerIndex(){
+        return this.winnerIndex;
+    }
+
+    Player getWinningPlayer(){
+        return getPlayer(getWinnerIndex());
+    }
+
+    boolean isCurrentPlayerWinning(){
+        return this.playerTurnIndex == this.winnerIndex;
+    }
+
+    void setWinning(){
+        this.winnerIndex = this.playerTurnIndex;
     }
 
 

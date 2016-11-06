@@ -128,30 +128,38 @@ public class Main {
             strScanner.nextLine();
             clearScreen();
 
-            //Move to the next player's go
-            table.advancePlay();
-
             //run the remaining players
             for (int p = 1; p < numPlayers; p++) {
-                remainingPlayers(table, trick);
-
-                System.out.println("Press <ENTER> when ready for next player");
-                strScanner.nextLine();
-                clearScreen();
-
                 //Move to the next player's go
                 table.advancePlay();
 
+                //play a card, and flags winner if necessary
+                boolean winner = remainingPlayers(table, trick);
+                if (winner){
+                    table.setWinning();
+                    System.out.println("You are winning right now.");
+                } else {
+                    System.out.println("That card didn't help you.");
+                }
+                System.out.println("Press <ENTER> when ready to continue");
+                strScanner.nextLine();
+                clearScreen();
             }
-            System.out.println("Now score!!!!!");
-            //TODO score trick
+            clearScreen();
+            System.out.println(trick.toString());
 
-            //TODO starting with player who took trick, repeat above
+            System.out.println(table.getWinningPlayer().getName() + " played the highest " + SuitManager.getSuitString(trick.getSuit()));
+            if (round < 6) {
+                System.out.println(table.getCurrentPlayer().getName() + " takes the trick and leads the next round");
+                //start the new round with that player
+                table.startNewRound(table.getWinnerIndex());
+            } else {
+                System.out.println(table.getCurrentPlayer().getName() + " wins the game of Agram!");
+            }
+            System.out.println("Press <Enter> to continue");
+            strScanner.nextLine();
         }
-
-        //TODO declare winner
-
-
+        //TODO build in a play again loop
     }
 
     private static Card firstPlayer(Game table){
@@ -207,7 +215,7 @@ public class Main {
         return table.getCurrentPlayer().getHand().moveFrom(cardSelections[selection]);
     }
 
-    private static void remainingPlayers(Game table, Trick trick){
+    private static boolean remainingPlayers(Game table, Trick trick){
         clearScreen();
         System.out.println("BEGIN TURN FOR " + table.getCurrentPlayer().getName().toUpperCase());
         System.out.println("All other players look away! Press <ENTER> to continue");
@@ -226,6 +234,7 @@ public class Main {
         System.out.println(CHIEF.getCardGlyph() + " AGRAM"); //just a fun cosmetic nod);
         System.out.println("-- Cards in play -- ");
         System.out.println(trick.toString());
+        //TODO words about winning card
         System.out.println();
 
         //Show a list of the cards in the hand, keyed to integers
@@ -236,7 +245,7 @@ public class Main {
             if (trick.isLegal(cardSelections[i], table.getCurrentPlayer())){
                 System.out.printf("%1d: %s\n", i + 1, cardSelections[i].getLongString());
             } else {
-                System.out.printf("x: %s\n", cardSelections[i].getLongString()); //invalid selections eliminated
+                System.out.printf("x: -%s-\n", cardSelections[i].getLongString()); //invalid selections eliminated
             }
 
         }
@@ -262,7 +271,8 @@ public class Main {
         } while (!legit);
 
         //Move the Card out of hand into Trick
-        trick.addCard(table.getCurrentPlayer().getHand().moveFrom(cardSelections[selection]));
+        return trick.addCard(table.getCurrentPlayer().getHand().moveFrom(cardSelections[selection]));
+        //note that this returns a boolean which tells main if this player is now winning
     }
 
     private static void clearScreen() {
