@@ -8,9 +8,7 @@ import name.lplade.SuitManager.Suit; //Suit enum
 
 public class Main {
 
-    //set up keyboard scanners
-    private static Scanner numScanner = new Scanner(System.in);
-    //TODO get all inputs as string and convert to int, then pull numScanner
+    //set up keyboard scanner
     private static Scanner strScanner = new Scanner(System.in);
 
     private static final Card CHIEF = new Card(Suit.SPADES, 1);
@@ -27,7 +25,7 @@ public class Main {
 
         while (true) {
             System.out.print("How many players? ");
-            numPlayers = numScanner.nextInt(); //TODO better input error handling
+            numPlayers = inputInt();
 
             //we run out of cards if we have 6 or more players
             if (numPlayers > 1 && numPlayers < 6) {
@@ -42,7 +40,7 @@ public class Main {
         for (int p = 0; p < numPlayers; p++) {
             while (true) {
                 System.out.println("Enter the name for player " + (p + 1) + ": "); //normal person counting
-                String name = strScanner.nextLine();
+                String name = inputString();
                 if (name.isEmpty()) { //make sure we actually entered a name before continuing
                     System.out.println("Name can't be blank!");
                 } else {
@@ -75,7 +73,7 @@ public class Main {
         //Let's just pick one player at random to deal first.
         //Generate a random index between 0 and the number of players
         int firstPlayer = ThreadLocalRandom.current().nextInt(0, numPlayers);
-        System.out.println("(Selected player " + firstPlayer);
+        //System.out.println("(Selected player " + firstPlayer);
         assert (firstPlayer >= 0 && firstPlayer < (table.getPlayerCount())): numPlayers;
 
         //initialize the round at that index
@@ -143,7 +141,7 @@ public class Main {
             Trick trick = new Trick(firstPlayer(table));
 
             System.out.println("Press <ENTER> when ready for next player");
-            strScanner.nextLine();
+            inputEnter();
             clearScreen();
 
             //run the remaining players
@@ -160,7 +158,7 @@ public class Main {
                     System.out.println("That card didn't help you.");
                 }
                 System.out.println("Press <ENTER> when ready to continue");
-                strScanner.nextLine();
+                inputEnter();
                 clearScreen();
             }
             clearScreen();
@@ -175,9 +173,51 @@ public class Main {
                 System.out.println(table.getCurrentPlayer().getName() + " wins the game of Agram!");
             }
             System.out.println("Press <Enter> to continue");
-            strScanner.nextLine();
+            inputEnter();
         }
         //TODO build in a play again loop
+
+        //Close the scanner
+        strScanner.close();
+    }
+
+    private static void inputEnter() {
+        //wait until we press enter, ignores any input
+        //Scanner strScanner = new Scanner(System.in);
+        while(strScanner.hasNextLine()) {
+            strScanner.nextLine();
+        }
+        //strScanner.close();
+    }
+
+    private static String inputString() {
+        //string input scanner
+        //Scanner strScanner = new Scanner(System.in);
+        String input = strScanner.nextLine();
+
+        return input;
+    }
+
+    private static int inputInt() {
+        //integer input scanner with validation
+        //Scanner strScanner = new Scanner(System.in);
+        int input = -1;
+        String inputStr = "FAIL";
+        boolean badInt = true;
+        while(badInt) {
+            inputStr = strScanner.nextLine();
+            try {
+                badInt = false;
+                input = Integer.parseInt(inputStr);
+            } catch (NumberFormatException e) {
+                badInt = true;
+                System.out.println("Please enter a valid number!");
+            }
+        }
+        assert (! inputStr.equals("FAIL")) : inputStr;
+        assert (input >= 0) : input;
+        //strScanner.close();
+        return input;
     }
 
     private static Card firstPlayer(Game table){
@@ -187,7 +227,7 @@ public class Main {
         System.out.println("NEW ROUND");
         System.out.println("BEGIN TURN FOR " + table.getCurrentPlayer().getName().toUpperCase());
         System.out.println("All other players look away! Press <ENTER> to continue");
-        strScanner.nextLine();
+        inputEnter();
 
         table.getCurrentPlayer().getHand().sort(); //sort the cards so it's easier to understand what you have
 
@@ -221,8 +261,8 @@ public class Main {
         boolean legit = false;
 
         do {
-            selection = numScanner.nextInt() - 1;
-            //TODO better input validation
+            selection = inputInt() - 1;
+
             if (selection >= 0 && selection < table.getCurrentPlayer().getHand().getLength()) {
                 legit = true;
 
@@ -239,7 +279,7 @@ public class Main {
         clearScreen();
         System.out.println("BEGIN TURN FOR " + table.getCurrentPlayer().getName().toUpperCase());
         System.out.println("All other players look away! Press <ENTER> to continue");
-        strScanner.nextLine();
+        inputEnter();
         clearScreen();
 
         table.getCurrentPlayer().getHand().sort(); //sort the cards so it's easier to understand what you have
@@ -280,7 +320,7 @@ public class Main {
         boolean legit = false;
 
         do {
-            selection = numScanner.nextInt() - 1;
+            selection = inputInt() - 1;
             //TODO better input validation
             if (selection >= 0
                     && selection < table.getCurrentPlayer().getHand().getLength()
@@ -299,8 +339,6 @@ public class Main {
 
     private static void clearScreen() {
         //method to clear the screen
-
-
 /*
         //this doesn't work very well in different environments
 
