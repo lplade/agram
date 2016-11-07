@@ -92,8 +92,9 @@ class Card {
     }
 
     //return card as string "ace of spades"
+    //pads first word to 3 characters for tabular output
     String getLongString() {
-        return String.format("%s of %s",NumberManager.getNumberString(this.value), SuitManager.getSuitString(this.suit));
+        return String.format("%3s of %s",NumberManager.getNumberString(this.value), SuitManager.getSuitString(this.suit));
     }
 
     public boolean isFaceDown() {

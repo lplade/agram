@@ -60,7 +60,7 @@ class NumberManager {
     }
 
     static String getNumberStringShort(int numberInt) {
-        assert numberStringsShort.containsKey(numberInt);
+        assert numberStringsShort.containsKey(numberInt) : numberInt;
 
         if (numberStringsShort.containsKey(numberInt)) {
             return numberStringsShort.get(numberInt);
@@ -70,7 +70,7 @@ class NumberManager {
     }
 
     static Integer getNumberValue(int numberInt) {
-        assert numberValues.containsKey(numberInt);
+        assert numberValues.containsKey(numberInt) : numberInt;
 
         if (numberValues.containsKey(numberInt)) {
             return numberValues.get(numberInt);

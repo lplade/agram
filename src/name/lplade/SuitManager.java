@@ -2,6 +2,8 @@ package name.lplade;
 
 //class to encode suits
 
+import com.sun.istack.internal.NotNull;
+
 // move from subclass of Card into own class
 class SuitManager {
 

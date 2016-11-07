@@ -36,40 +36,52 @@ public class Main {
         }
 
         //get some player names
-        String[] playerNames = new String[numPlayers];
-        for (int p = 0; p < numPlayers; p++) {
-            while (true) {
+        boolean okay;
+        String[] playerNames;
+        do {
+            playerNames = new String[numPlayers];
+            for (int p = 0; p < numPlayers; p++) {
+
                 System.out.println("Enter the name for player " + (p + 1) + ": "); //normal person counting
                 String name = inputString();
-                if (name.isEmpty()) { //make sure we actually entered a name before continuing
-                    System.out.println("Name can't be blank!");
+                if (name.isEmpty()) {
+                    playerNames[p] = "Player " + (p + 1); //default value for the lazy
                 } else {
                     playerNames[p] = name;
-                    break; //resume
                 }
             }
-        }
 
-        //TODO add a way to designate some players as CPU controlled
+            //TODO add a way to designate some players as CPU controlled
 
-        //This is just for testing:
-        System.out.println("#  Player");
-        for (int p = 0; p < numPlayers; p++) {
-            System.out.printf("%1d  %s\n", (p + 1), playerNames[p]);
-        }
 
-        //TODO offer some kind of confirmation here in case of mistakes
+            System.out.println("#  Player");
+            for (int p = 0; p < numPlayers; p++) {
+                System.out.printf("%1d  %s\n", (p + 1), playerNames[p]);
+            }
+            System.out.println();
+            System.out.print("Does that look okay? (Y/N) ");
+            okay = inputYN();
+            System.out.println();
+
+        } while (! okay);
 
         Game table = new Game(playerNames);
 
         Deck deck = new Deck();
-        System.out.println("Removing 'the Chief'...");
+        System.out.println("Removing the \"Chief\"...");
+        delay(200);
         System.out.println(CHIEF.getCardGlyph());
         System.out.println();
+        delay(200);
         System.out.println("Here is the Agram deck:");
         System.out.println(deck.toString2());
         System.out.println();
-
+        System.out.println("Remember, aces are high");
+        System.out.println();
+        System.out.println("Win tricks by playing the highest card matching the leading suit.");
+        System.out.println("Winner of each trick gets to lead the next round.");
+        System.out.println("Winner of the sixth round wins the game!");
+        System.out.println();
         //Let's just pick one player at random to deal first.
         //Generate a random index between 0 and the number of players
         int firstPlayer = ThreadLocalRandom.current().nextInt(0, numPlayers);
@@ -81,30 +93,18 @@ public class Main {
 
         System.out.print(playerNames[firstPlayer] + " shuffles... ");
         //insert a tiny pause
-        //http://stackoverflow.com/questions/24104313/how-to-delay-in-java
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
+        delay(2000);
         deck.shuffle();
-
         System.out.println("done.");
-
 
         table.advancePlay(); //start dealing to NEXT player;
         //treat dealing like two go-rounds
         for (int t = 0; t < (numPlayers * 2); t++) {
             System.out.print("Dealing three cards to " + table.getCurrentPlayer().getName() + "... ");
             for (int i = 0; i < 3; i++) {
-
                 //insert a tiny pause so it feels more like actually dealing cards
-                //http://stackoverflow.com/questions/24104313/how-to-delay-in-java
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                }
+                delay(300);
+
                 Card newCard = deck.deal();
                 //System.out.print(newCard.getString() + " "); //DEBUG
                 System.out.print(CARDBACK + " ");
@@ -122,6 +122,9 @@ public class Main {
             assert (table.getPlayer(p).getHand().getLength() == 6) : table.getPlayer(p).getName();
         }
 
+        System.out.println("Press <Enter> to begin play");
+        inputEnter();
+
 
         //reset the counter, and start play to the dealer's right
         table.startNewRound(firstPlayer);
@@ -136,9 +139,10 @@ public class Main {
         for (int round = 0; round < 6; round++) {
             //Each player plays one card in the round
 
-
             // Run the first player's turn and construct the trick with the results
             Trick trick = new Trick(firstPlayer(table));
+
+
 
             System.out.println("Press <ENTER> when ready for next player");
             inputEnter();
@@ -162,45 +166,68 @@ public class Main {
                 clearScreen();
             }
             clearScreen();
+
+            System.out.println("You can call everyone back to look at the screen!");
+            System.out.println();
+            System.out.println("SUMMARY");
             System.out.println(trick.toString());
 
-            System.out.println(table.getWinningPlayer().getName() + " played the highest " + SuitManager.getSuitString(trick.getSuit()));
-            if (round < 6) {
-                System.out.println(table.getCurrentPlayer().getName() + " takes the trick and leads the next round");
+            System.out.println(table.getWinningPlayer().getName() + " played the highest " + SuitManager.getSuitString(trick.getSuit()) + ", so");
+            if (round < 5) {
+                System.out.println(table.getWinningPlayer().getName() + " takes the trick and leads the next round.");
                 //start the new round with that player
                 table.startNewRound(table.getWinnerIndex());
+                System.out.println("Press <Enter> to continue");
+                inputEnter();
             } else {
-                System.out.println(table.getCurrentPlayer().getName() + " wins the game of Agram!");
+                System.out.println(table.getWinningPlayer().getName() + " wins the game of Agram!");
             }
-            System.out.println("Press <Enter> to continue");
-            inputEnter();
+
         }
         //TODO build in a play again loop
 
         //Close the scanner
         strScanner.close();
+        System.exit(0);
+    }
+
+    // *** internal methods ***
+
+    private static boolean inputYN() {
+        //looks for a Y or N value, converts to a boolean
+
+        boolean yes = false;
+        boolean reenter;
+        do {
+            reenter = false;
+            String input = strScanner.nextLine();
+            if (input.toUpperCase().startsWith("Y")) {
+                yes = true;
+            } else if (input.toUpperCase().startsWith("N")) {
+                yes = false;
+            } else {
+                reenter = true;
+                System.out.println("Please enter Y or N");
+            }
+        } while (reenter);
+
+        return yes;
     }
 
     private static void inputEnter() {
-        //wait until we press enter, ignores any input
-        //Scanner strScanner = new Scanner(System.in);
-        while(strScanner.hasNextLine()) {
-            strScanner.nextLine();
-        }
-        //strScanner.close();
+        //wait until we press enter, ignores any input);
+        strScanner.nextLine();
+
     }
 
     private static String inputString() {
-        //string input scanner
-        //Scanner strScanner = new Scanner(System.in);
+        //string input scanner;
         String input = strScanner.nextLine();
-
         return input;
     }
 
     private static int inputInt() {
         //integer input scanner with validation
-        //Scanner strScanner = new Scanner(System.in);
         int input = -1;
         String inputStr = "FAIL";
         boolean badInt = true;
@@ -216,7 +243,6 @@ public class Main {
         }
         assert (! inputStr.equals("FAIL")) : inputStr;
         assert (input >= 0) : input;
-        //strScanner.close();
         return input;
     }
 
@@ -224,10 +250,14 @@ public class Main {
         //Handling for first player in round is unique since Trick isn't initialized yet
 
         clearScreen();
-        System.out.println("NEW ROUND");
-        System.out.println("BEGIN TURN FOR " + table.getCurrentPlayer().getName().toUpperCase());
+        System.out.println("                         ***NEW ROUND***");
+        System.out.println();
+        System.out.println("                       BEGIN TURN FOR " + table.getCurrentPlayer().getName().toUpperCase());
+        System.out.println();
         System.out.println("All other players look away! Press <ENTER> to continue");
         inputEnter();
+
+        clearScreen();
 
         table.getCurrentPlayer().getHand().sort(); //sort the cards so it's easier to understand what you have
 
@@ -240,9 +270,9 @@ public class Main {
         }
 
         System.out.println();
-        //System.out.println(CHIEF.getCardGlyph() + " AGRAM"); //just a fun cosmetic nod);
         System.out.println("-- Cards in play -- ");
-        System.out.println("none yet"); //first round
+        System.out.println("     none yet"); //first round
+        System.out.println("You may select the card to lead this trick.");
         System.out.println();
 
         //Show a list of the cards in the hand, keyed to integers
@@ -254,6 +284,7 @@ public class Main {
         }
 
         System.out.println();
+
 
         //Get input
         System.out.println("Select a card (1-" + table.getCurrentPlayer().getHand().getLength() + "):");
@@ -277,9 +308,16 @@ public class Main {
 
     private static boolean remainingPlayers(Game table, Trick trick){
         clearScreen();
-        System.out.println("BEGIN TURN FOR " + table.getCurrentPlayer().getName().toUpperCase());
+        //re-show current trick so players can see what's going on.
+        System.out.println();
+        System.out.println("-- Cards in play -- ");
+        System.out.println(trick.toString());
+        System.out.println();
+        System.out.println("                       BEGIN TURN FOR " + table.getCurrentPlayer().getName().toUpperCase());
+        System.out.println();
         System.out.println("All other players look away! Press <ENTER> to continue");
         inputEnter();
+
         clearScreen();
 
         table.getCurrentPlayer().getHand().sort(); //sort the cards so it's easier to understand what you have
@@ -293,10 +331,12 @@ public class Main {
         }
 
         System.out.println();
-        //System.out.println(CHIEF.getCardGlyph() + " AGRAM"); //just a fun cosmetic nod);
         System.out.println("-- Cards in play -- ");
         System.out.println(trick.toString());
-        //TODO words about winning card
+
+        String winningValue = trick.getHighValueStr();
+        String winningSuit = trick.getSuitStr();
+        System.out.printf("Beat %s of %s to win trick\n", winningValue, winningSuit);
         System.out.println();
 
         //Show a list of the cards in the hand, keyed to integers
@@ -304,10 +344,13 @@ public class Main {
         System.out.println(table.getCurrentPlayer().getHand());
 
         for (int i = 0; i < cardSelections.length; i++) {
-            if (trick.isLegal(cardSelections[i], table.getCurrentPlayer())){
+            if (trick.isLegal(cardSelections[i], table.getCurrentPlayer()) && trick.wouldWin(cardSelections[i])) {
+                System.out.printf("%1d: %-16s    <- this would beat the current card\n", i + 1, cardSelections[i].getLongString());
+            }
+            else if (trick.isLegal(cardSelections[i], table.getCurrentPlayer())){
                 System.out.printf("%1d: %s\n", i + 1, cardSelections[i].getLongString());
             } else {
-                System.out.printf("x: -%s-\n", cardSelections[i].getLongString()); //invalid selections eliminated
+                System.out.printf("   %-16s         <- not a valid play\n", cardSelections[i].getLongString()); //invalid selections eliminated
             }
 
         }
@@ -333,8 +376,15 @@ public class Main {
         } while (!legit);
 
         //Move the Card out of hand into Trick
-        return trick.addCard(table.getCurrentPlayer().getHand().moveFrom(cardSelections[selection]));
+        boolean winning = trick.addCard(table.getCurrentPlayer().getHand().moveFrom(cardSelections[selection]));
+
+        //re-show current trick so player can see what's going on.
+        System.out.println();
+        System.out.println("-- Cards in play -- ");
+        System.out.println(trick.toString());
+
         //note that this returns a boolean which tells main if this player is now winning
+        return winning;
     }
 
     private static void clearScreen() {
@@ -353,6 +403,16 @@ public class Main {
             System.out.println();
         }
 
+    }
+
+    private static void delay(int ms) {
+        //lets us delay a bit where it seems appropriate
+        //http://stackoverflow.com/questions/24104313/how-to-delay-in-java
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
     }
 
 

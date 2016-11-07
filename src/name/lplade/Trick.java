@@ -9,12 +9,14 @@ class Trick {
     private LinkedList<Card> pile = new LinkedList<>();
     private Suit suit; //the suit used for scoring the trick
     private int highVal; //the best value in this trick
+    private String highValString; //store that as a string too. easier due to encapsulation
 
     //TODO re-write so we can initialize with undefined values, then we don't need a special case for first round
     Trick(Card firstCard){ //create by passing the first card in the round
         this.pile.add(firstCard);
         this.suit = firstCard.getSuitEnum();
         this.highVal = firstCard.getValue();
+        this.highValString = firstCard.getNumberStr();
         //remember to treat the starting player as the round leader
     }
 
@@ -27,6 +29,14 @@ class Trick {
         return this.highVal;
     }
 
+    public String getHighValueStr(){
+        return this.highValString;
+    }
+
+    public String getSuitStr(){
+        return SuitManager.getSuitString(this.suit);
+    }
+
     boolean addCard(Card newCard){
         //TEST FOR LEGAL PLAYS BEFORE CALLING THIS
         boolean leading = false;
@@ -34,10 +44,22 @@ class Trick {
         if(newCard.getSuitEnum() == this.suit){
             if(newCard.getValue() > this.highVal){
                 this.highVal = newCard.getValue();
+                this.highValString = newCard.getNumberStr();
                 leading = true;
             }
         }
         return leading; //returns a flag to tell us the card puts us in the lead
+    }
+
+    boolean wouldWin(Card potentialCard){
+        //use this to test displayed cards if they would take trick
+        boolean leading = false;
+        if(potentialCard.getSuitEnum() == this.suit) {
+            if(potentialCard.getValue() > this.highVal){
+                leading = true;
+            }
+        }
+        return leading;
     }
 
     boolean isLegal(Card newCard, Player player){
