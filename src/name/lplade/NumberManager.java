@@ -13,11 +13,14 @@ class NumberManager {
 
     //This gets used by other classes and needed to move out into its own class
 
-    private static final int ACE = 0x01;
+    static final int ACE = 0x01;
     private static HashMap<Integer, String> numberStrings;
     private static HashMap<Integer, String> numberStringsShort;
     private static HashMap<Integer, Integer> numberValues;
 
+    //We map "2" so we can loop over it safely, but we don't put it in a deck
+
+    //numberStrings: "ace","3","4"..."10"
     static {
         numberStrings = new HashMap<Integer, String>();
         numberStrings.put(ACE,"ace");
@@ -37,6 +40,7 @@ class NumberManager {
         }
     }
 
+    //numberValues: 11, 3, 4 ... 10
     static {
         numberValues = new HashMap<Integer, Integer>();
         numberValues.put(ACE, 11);
@@ -46,7 +50,7 @@ class NumberManager {
     }
 
     static String getNumberString(int numberInt) {
-        assert numberStrings.containsKey(numberInt);
+        assert numberStrings.containsKey(numberInt) : numberInt;
 
         if (numberStrings.containsKey(numberInt)) {
             return numberStrings.get(numberInt);

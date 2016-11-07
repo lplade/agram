@@ -33,9 +33,16 @@ class Card {
 
     String getString(){
         //return something like "9♣"
-        //TODO make hearts and diamonds red?
         String numPart = NumberManager.getNumberStringShort(this.value);
-        String symPart = Character.toString(SuitManager.getSuitGlyph(this.suit));
+        String symPart;
+        if (this.isRed) {
+            symPart = redLeaveBack(Character.toString(SuitManager.getSuitGlyph(this.suit)));
+        } else {
+            //symPart = blacken(Character.toString(SuitManager.getSuitGlyph(this.suit)))
+            //let's just leave black suits in the default console text color
+            symPart = Character.toString(SuitManager.getSuitGlyph(this.suit));
+        }
+        //String symPart = Character.toString(SuitManager.getSuitGlyph(this.suit));
         return numPart + symPart;
     }
 
@@ -55,19 +62,17 @@ class Card {
         return cardGlyph;
     }
 
-    //TODO getCardGlyph to return single Unicode glyph representing the card.
-
-    //returns number that appears on face of card, 2 through A;
+    //returns number that appears on face of card, 3 through A;
     public String getNumberStr(){
         return NumberManager.getNumberString(this.value);
     }
 
     //returns numeric value for in-game comparisons
-    public int getValue(){
+    int getValue(){
         int value = NumberManager.getNumberValue(this.value);
 
         //complain if value is somehow outside of expected range
-        assert value >= 2 && value <= 11 : value;
+        assert value >= 3 && value <= 11 : value;
         return value;
     }
 
@@ -82,12 +87,12 @@ class Card {
     }
 
     //return the raw Suit enum as defined in SuitManager
-    public Suit getSuitEnum(){
+    Suit getSuitEnum(){
         return this.suit;
     }
 
     //return card as string "ace of spades"
-    public String getLongString() {
+    String getLongString() {
         return String.format("%s of %s",NumberManager.getNumberString(this.value), SuitManager.getSuitString(this.suit));
     }
 
@@ -135,4 +140,14 @@ class Card {
         }
     }
 
+    private String redLeaveBack(String makeMeRed) {
+        //sets red but leaves background alone
+        if (ANSI_COLOR) {
+            final String ANSI_reset_color = "\u001B[0m";
+            final String RED_TEXT = "\u001B[31m";
+            return RED_TEXT + makeMeRed + ANSI_reset_color;
+        } else {
+            return makeMeRed; //don't color if parameter is disabled
+        }
+    }
 }

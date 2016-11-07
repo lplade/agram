@@ -10,7 +10,7 @@ class Trick {
     private Suit suit; //the suit used for scoring the trick
     private int highVal; //the best value in this trick
 
-    //TODO re-write so we can initialize with undefined values
+    //TODO re-write so we can initialize with undefined values, then we don't need a special case for first round
     Trick(Card firstCard){ //create by passing the first card in the round
         this.pile.add(firstCard);
         this.suit = firstCard.getSuitEnum();

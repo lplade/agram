@@ -1,6 +1,9 @@
 package name.lplade;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+
+import static name.lplade.NumberManager.ACE;
 
 class Player {
 
@@ -64,7 +67,29 @@ class Player {
             //this.cardsInHand = null;
         }
 
-        //TODO sort hands in a consistent way every time they are displayed
+        void sort(){
+            // https://courses.cs.vt.edu/csonline/Algorithms/Lessons/SimpleCardSort/index.html
+            Hand tempHand = new Hand();
+            for (SuitManager.Suit suit : SuitManager.Suit.values()) {
+                //System.out.println("Sorting " + suit.toString());
+                int[] displaySequence = { 3, 4, 5, 6, 7, 8, 9, 10, ACE}; //TODO expand NumberManager to help with this?
+                for (int value : displaySequence) {
+                    //System.out.println("  Sorting " + NumberManager.getNumberString(value));
+                    //need to use "iterator" form to remove from a list we are looping through!
+                    for (Iterator<Card> iterator = this.cardsInHand.iterator(); iterator.hasNext(); ) {
+                        Card card = iterator.next();
+                        if (card.getValue() == NumberManager.getNumberValue(value) && card.getSuitEnum() == suit) {
+                            //System.out.println("SORT: Moving " + card.getString());
+                            tempHand.add(card); //move the card into the new "hand"
+                            iterator.remove(); //destroy the card in the old hand
+                        }
+                    }
+                }
+            }
+            //once sorted, replace our original hand with this sorted hand
+            this.cardsInHand = tempHand.cardsInHand;
+
+        }
 
         private void add(Card cardToAdd){
             this.cardsInHand.add(cardToAdd);

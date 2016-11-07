@@ -64,17 +64,35 @@ public class Main {
 
         Game table = new Game(playerNames);
 
+        Deck deck = new Deck();
+        System.out.println("Removing 'the Chief'...");
+        System.out.println(CHIEF.getCardGlyph());
+        System.out.println();
+        System.out.println("Here is the Agram deck:");
+        System.out.println(deck.toString2());
+        System.out.println();
+
         //Let's just pick one player at random to deal first.
         //Generate a random index between 0 and the number of players
         int firstPlayer = ThreadLocalRandom.current().nextInt(0, numPlayers);
-        assert (firstPlayer >= 0 && firstPlayer < (table.getPlayerCount() - 1));
+        System.out.println("(Selected player " + firstPlayer);
+        assert (firstPlayer >= 0 && firstPlayer < (table.getPlayerCount())): numPlayers;
 
         //initialize the round at that index
         table.startNewRound(firstPlayer);
 
         System.out.print(playerNames[firstPlayer] + " shuffles... ");
-        Deck deck = new Deck();
+        //insert a tiny pause
+        //http://stackoverflow.com/questions/24104313/how-to-delay-in-java
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+        deck.shuffle();
+
         System.out.println("done.");
+
 
         table.advancePlay(); //start dealing to NEXT player;
         //treat dealing like two go-rounds
@@ -171,6 +189,8 @@ public class Main {
         System.out.println("All other players look away! Press <ENTER> to continue");
         strScanner.nextLine();
 
+        table.getCurrentPlayer().getHand().sort(); //sort the cards so it's easier to understand what you have
+
         //Feed the ArrayList of cards into an array of console-friendly selections
         int cardIndex = 0;
         Card[] cardSelections = new Card[table.getCurrentPlayer().getHand().getLength()];
@@ -180,7 +200,7 @@ public class Main {
         }
 
         System.out.println();
-        System.out.println(CHIEF.getCardGlyph() + " AGRAM"); //just a fun cosmetic nod);
+        //System.out.println(CHIEF.getCardGlyph() + " AGRAM"); //just a fun cosmetic nod);
         System.out.println("-- Cards in play -- ");
         System.out.println("none yet"); //first round
         System.out.println();
@@ -222,6 +242,8 @@ public class Main {
         strScanner.nextLine();
         clearScreen();
 
+        table.getCurrentPlayer().getHand().sort(); //sort the cards so it's easier to understand what you have
+
         //Feed the ArrayList of cards into an array of console-friendly selections
         int cardIndex = 0;
         Card[] cardSelections = new Card[table.getCurrentPlayer().getHand().getLength()];
@@ -231,7 +253,7 @@ public class Main {
         }
 
         System.out.println();
-        System.out.println(CHIEF.getCardGlyph() + " AGRAM"); //just a fun cosmetic nod);
+        //System.out.println(CHIEF.getCardGlyph() + " AGRAM"); //just a fun cosmetic nod);
         System.out.println("-- Cards in play -- ");
         System.out.println(trick.toString());
         //TODO words about winning card

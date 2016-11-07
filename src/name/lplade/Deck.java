@@ -11,13 +11,11 @@ class Deck {
     //This generates the special 35-card Agram deck
 
     Deck(){
-        //
-        //int[] suits = { 0xA0, 0xB0, 0xC0, 0xD0 }; //TODO use SuitManager? enums?
         // http://stackoverflow.com/questions/1104975/a-for-loop-to-iterate-over-an-enum-in-java
         for(Suit s : Suit.values()){
         //for(int s=0; s < 4; s++){ //each suit
-            for(int val=1; val <= 10; val++) { //ace, 2, 3 ... 10)
-                if (!(val == 1 && s == Suit.SPADES)) { //don't add "the chief"
+            for(int val=1; val <= 10; val++) { //ace, *2*, 3 ... 10)
+                if (val !=2 && !(val == 1 && s == Suit.SPADES)) { //don't add twos or "the chief"
                     Card cardToAdd = new Card(s, val);
                     this.deck.add(cardToAdd);
                 }
@@ -25,16 +23,14 @@ class Deck {
         }
         assert this.deck.size() == 35;
 
-        //can't imagine a use case for an un-shuffled deck, let's shuffle on construction
-        Collections.shuffle(this.deck);
+        //Collections.shuffle(this.deck);
     }
 
-    //in case we ever need to re-shuffle?
     void shuffle(){
         Collections.shuffle(this.deck);
     }
 
-    public Card deal(){
+    Card deal(){
         return this.deck.pop();
     }
 
