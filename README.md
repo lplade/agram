@@ -12,5 +12,6 @@ Traditional card game from Niger.
 Currently supporting hot-seat multi-player.
 
 Future features:
+
 -[ ] rudimentary CPU player
 -[ ] GUI
